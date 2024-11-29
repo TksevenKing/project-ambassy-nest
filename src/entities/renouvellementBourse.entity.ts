@@ -1,11 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class RenouvellementBourse{
+@Entity('renouvellements')
+export class RenouvellementBourseEntity{
     @PrimaryGeneratedColumn()
     renouvellement_id: string;
 
-    @Column()
+    @CreateDateColumn()
     date_demande: Date;
 
     @Column()

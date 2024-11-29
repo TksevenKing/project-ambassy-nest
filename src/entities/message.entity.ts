@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity('messages')
 
-export class message{
+export class messageEntity{
     @PrimaryGeneratedColumn()
     message: number;
 

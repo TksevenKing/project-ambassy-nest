@@ -1,8 +1,8 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity('forums')
 
-export class forum{
+export class forumEntity{
     @PrimaryGeneratedColumn()
     forum_id: string;
 

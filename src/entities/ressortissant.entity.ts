@@ -1,7 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class ressortissant{
+@Entity('ressortissants')
+export class ressortissantEntity{
     @PrimaryGeneratedColumn()
     ressortissant_id: number;
 
@@ -11,7 +11,7 @@ export class ressortissant{
     @Column()
     sexe: string;
     
-    @Column()
+    @CreateDateColumn()
     date_naissance: Date;
 
     @Column()
@@ -23,7 +23,7 @@ export class ressortissant{
     @Column()
     passeport_num: string;
 
-    @Column()
+    @CreateDateColumn()
     passeport_expiration: string;
 
     @Column()
@@ -41,8 +41,8 @@ export class ressortissant{
     @Column()
     etat_civil: string;
 
-    @Column()
-    nombre_enfant: string;
+    @Column({type: 'int'})
+    nombre_enfant: number;
 
     @Column()
     numero_consulaire: string;

@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+@Entity('secretaires')
 
-export class secretaire{
+export class secretaireEntity{
     @PrimaryGeneratedColumn()
     secretaire_id: number;
 }
