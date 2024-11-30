@@ -5,7 +5,7 @@ export class UtilisateurController {
     @Get()
     hello(){
 
-        return "hello words fuck github";
+        return "hello words";
 
 
     }
