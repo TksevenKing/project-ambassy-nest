@@ -20,7 +20,7 @@ export class utilisateurEntity{
 
     @Column()
     role: string
-
+    
     @OneToMany(type => rendez_vousEntity, rendez_vous => rendez_vous.utilisateurs)
     rendez_vous: rendez_vousEntity[];
 
