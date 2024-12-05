@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { rendez_vousEntity } from "./rendezVous.entity";
 
-@Entity('Utilisateurs')
+@Entity('utilisateurs')
 export class utilisateurEntity{
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({name: 'user_id'})
     utilisateur_id: number;
   
     @Column()
@@ -22,7 +22,7 @@ export class utilisateurEntity{
     role: string
 
     @OneToMany(type => rendez_vousEntity, rendez_vous => rendez_vous.utilisateurs)
-    rendez_voust: rendez_vousEntity[];
+    rendez_vous: rendez_vousEntity[];
 
 
   
