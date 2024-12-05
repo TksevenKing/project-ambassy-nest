@@ -4,7 +4,7 @@ import { utilisateurEntity } from "./utilisateur.entity";
 @Entity('rendez_vous')
 
 export class rendez_vousEntity{
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({name: 'rdv_id'})
     rdv_id: number;
 
     @Column()
@@ -16,6 +16,6 @@ export class rendez_vousEntity{
     @Column()
     heure: string;
 
-    @ManyToOne(type => utilisateurEntity, utilisateur => utilisateur.rendez_voust)
+    @ManyToOne(type => utilisateurEntity, utilisateur => utilisateur.rendez_vous)
     utilisateurs: utilisateurEntity;
 }
