@@ -6,7 +6,16 @@ export class notificationEntity{
     notification_id: number;
 
     @Column()
+    sender_email: string;
+
+    @Column()
+    receiver_email: string;
+
+    @Column()
     objet: string;
+
+    @Column({type: 'text'})
+    contenu: string;
 
     @CreateDateColumn()
     createdAt: Date;

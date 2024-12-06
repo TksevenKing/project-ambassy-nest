@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { etudiantEntity } from "./etudiant.entity";
 
 @Entity('renouvellements')
 export class RenouvellementBourseEntity{
@@ -8,9 +9,12 @@ export class RenouvellementBourseEntity{
     @CreateDateColumn()
     date_demande: Date;
 
-    @Column()
+    @Column({type: "enum", enum: ["enCours", "traiter", "nonTraiter"], default:"nonTraiter"})
     statut: string;
 
     @Column()
     etudiant_id: number;
+
+    @ManyToOne(type => etudiantEntity, etudiant => etudiant.renouvellements)
+    etudiant: etudiantEntity;
 }

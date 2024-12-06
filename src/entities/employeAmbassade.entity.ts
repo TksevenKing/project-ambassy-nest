@@ -6,8 +6,23 @@ export class employe_ambassadeEntity{
     employe_id: number;
 
     @Column()
-    matricule: string;
+    nom: string;
+  
+    @Column()
+    prenom: string;
 
     @Column()
+    email: string;
+    
+    @Column()
+    motDePasse: string;
+
+    @Column()
+    telephone: string;
+
+    @Column()
+    matricule: string;
+
+    @Column({type: "enum", enum: ["charge_academique","charge_recensement","secretaire"], default: "charge_academique"})
     fonction: string;
 }

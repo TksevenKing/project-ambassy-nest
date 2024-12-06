@@ -1,11 +1,23 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { utilisateurEntity } from "./utilisateur.entity";
+
 
 @Entity('rendez_vous')
 
 export class rendez_vousEntity{
-    @PrimaryGeneratedColumn({name: 'rdv_id'})
+    @PrimaryGeneratedColumn({name: 'rdv_id'}) // Pour prendre un vous devez vous recenser aupres de l'ambassade
     rdv_id: number;
+
+    @Column()
+    nom: string;
+  
+    @Column()
+    prenom: string;
+
+    @Column()
+    email: string;
+
+    @Column()
+    telephone: string;
 
     @Column()
     objet: string;
@@ -16,6 +28,4 @@ export class rendez_vousEntity{
     @Column()
     heure: string;
 
-    @ManyToOne(type => utilisateurEntity, utilisateur => utilisateur.rendez_vous)
-    utilisateurs: utilisateurEntity;
 }
