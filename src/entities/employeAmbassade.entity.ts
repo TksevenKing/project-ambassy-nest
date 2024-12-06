@@ -23,6 +23,6 @@ export class employe_ambassadeEntity{
     @Column()
     matricule: string;
 
-    @Column({type: "enum", enum: ["charge_academique","charge_recensement","secretaire"], default: "charge_academique"})
+    @Column()  //{type: "enum", enum: ["charge_academique","charge_recensement","secretaire"], default: "charge_academique"}
     fonction: string;
 }

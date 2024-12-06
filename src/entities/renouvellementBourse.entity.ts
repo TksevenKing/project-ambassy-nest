@@ -2,14 +2,14 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } f
 import { etudiantEntity } from "./etudiant.entity";
 
 @Entity('renouvellements')
-export class RenouvellementBourseEntity{
-    @PrimaryGeneratedColumn({name: 'renouvellement_id'})
+export class RenouvellementBourseEntity {
+    @PrimaryGeneratedColumn({ name: 'renouvellement_id' })
     renouvellement_id: number;
 
     @CreateDateColumn()
     date_demande: Date;
 
-    @Column({type: "enum", enum: ["enCours", "traiter", "nonTraiter"], default:"nonTraiter"})
+    @Column({ default: "nonTraiter" })  //type: "enum", enum: ["enCours", "traiter", "nonTraiter"],
     statut: string;
 
     @Column()

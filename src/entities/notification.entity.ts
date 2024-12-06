@@ -1,11 +1,11 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('notifications')
-export class notificationEntity{
+export class notificationEntity {
     @PrimaryGeneratedColumn()
     notification_id: number;
 
-    @Column()
+    @Column({ default: "secretaire@gmail.com" })
     sender_email: string;
 
     @Column()
@@ -14,7 +14,7 @@ export class notificationEntity{
     @Column()
     objet: string;
 
-    @Column({type: 'text'})
+    @Column({ type: 'text' })
     contenu: string;
 
     @CreateDateColumn()

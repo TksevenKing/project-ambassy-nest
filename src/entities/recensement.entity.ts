@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('recensement')
-export class ressortissantEntity{
+@Entity('recensements')
+export class recensementEntity{
     @PrimaryGeneratedColumn({name: 'recensement_id'})
     recensement_id: number;
 
@@ -41,7 +41,7 @@ export class ressortissantEntity{
     @Column()
     statut_residant: string;
 
-    @Column({type: "enum", enum: ["etudiant", "travailleur", "demander Asile", "tourist"]})
+    @Column()  //{type: "enum", enum: ["etudiant", "travailleur", "demander Asile", "tourist"]}
     categorie: string;
 
     @Column()
