@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { utilisateurEntity } from "./utilisateur.entity";
 
 @Entity('rendez_vous')
@@ -10,7 +10,7 @@ export class rendez_vousEntity{
     @Column()
     objet: string;
 
-    @Column()
+    @CreateDateColumn()
     date_rdv: Date;
 
     @Column()

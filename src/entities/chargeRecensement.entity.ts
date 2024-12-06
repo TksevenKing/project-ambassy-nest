@@ -2,6 +2,6 @@ import { Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('charge_recesements')
 export class charger_recensementEntity{
-    @PrimaryGeneratedColumn()
-    charger_recensement_id: string;
+    @PrimaryGeneratedColumn({name: 'charger_r_id'})
+    charger_r_id: number;
 }

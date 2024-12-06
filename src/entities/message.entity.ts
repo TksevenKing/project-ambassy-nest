@@ -1,15 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('messages')
 
 export class messageEntity{
-    @PrimaryGeneratedColumn()
-    message: number;
+    @PrimaryGeneratedColumn({name: 'message_id'})
+    message_id: number;
 
-    @Column()
+    @Column({type: 'text'})
     contenu: string;
 
-    @Column()
+    @CreateDateColumn()
     date_envoi: Date;
 
     @Column()

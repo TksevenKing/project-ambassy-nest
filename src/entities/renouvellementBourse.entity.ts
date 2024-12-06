@@ -2,8 +2,8 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeor
 
 @Entity('renouvellements')
 export class RenouvellementBourseEntity{
-    @PrimaryGeneratedColumn()
-    renouvellement_id: string;
+    @PrimaryGeneratedColumn({name: 'renouvellement_id'})
+    renouvellement_id: number;
 
     @CreateDateColumn()
     date_demande: Date;

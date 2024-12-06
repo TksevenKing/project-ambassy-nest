@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeor
 
 @Entity('ressortissants')
 export class ressortissantEntity{
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({name: 'ressortissant_id'})
     ressortissant_id: number;
 
     @Column()
@@ -24,7 +24,7 @@ export class ressortissantEntity{
     passeport_num: string;
 
     @CreateDateColumn()
-    passeport_expiration: string;
+    passeport_expiration: Date;
 
     @Column()
     adresse: string;
