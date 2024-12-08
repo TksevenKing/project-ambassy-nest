@@ -27,6 +27,6 @@ export class EtudiantController {
 
     @Put('password/:etudiant_id')
     modifierPassword(@Param('etudiant_id') etudiant_id, @Body() passwordDto){
-        return 'mot de passe changer avec succes';
+        return 'mot de passe changer avec succes je suis le master de Oumar Cissé';
     }
 }
