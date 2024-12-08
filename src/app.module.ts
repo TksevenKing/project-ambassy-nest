@@ -1,19 +1,15 @@
 import { Module } from '@nestjs/common';
 import { RendezVousModule } from './rendez-vous/rendez-vous.module';
-import { ForumModule } from './forum/forum.module';
 import { RenouvellementBourseModule } from './renouvellement-bourse/renouvellement-bourse.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecensementModule } from './recensement/recensement.module';
+import { EtudiantModule } from './etudiant/etudiant.module';
 
 
 
 
 @Module({
   imports: [ 
-    RendezVousModule, 
-    ForumModule,
-    RecensementModule,
-    RenouvellementBourseModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -25,6 +21,10 @@ import { RecensementModule } from './recensement/recensement.module';
       logging: true,
       synchronize: true,
     }),
+    RendezVousModule, 
+    RecensementModule,
+    RenouvellementBourseModule,
+    EtudiantModule,
   ],
   controllers: [],
   providers: [],
