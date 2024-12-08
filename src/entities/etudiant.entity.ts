@@ -35,7 +35,7 @@ export class etudiantEntity{
     @Column()
     annee_bac: string;
 
-    @Column({type: 'tinyint'})
+    @Column({type: 'tinyint', default: 1})
     bourseActive: number;
     
     @Column()
