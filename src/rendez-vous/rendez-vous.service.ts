@@ -55,9 +55,9 @@ export class RendezVousService {
     }
 
     // Créer un nouveau rendez-vous
-    async creerRendezVous(rendezVousDto: rendezVousDto) {
+    async creerRendezVous(RendezVousDto: rendezVousDto) {
         try {
-            const nouveauRendezVous = await this.rendez_vous.save(rendezVousDto);
+            const nouveauRendezVous = await this.rendez_vous.save(RendezVousDto);
             return nouveauRendezVous;
         } catch (error) {
             console.error("Erreur lors de la création du rendez-vous :", error);
