@@ -4,6 +4,8 @@ import { RenouvellementBourseModule } from './renouvellement-bourse/renouvelleme
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RecensementModule } from './recensement/recensement.module';
 import { EtudiantModule } from './etudiant/etudiant.module';
+import { AuthentificationModule } from './authentification/authentification.module';
+import { UsersModule } from './users/users.module';
 
 
 
@@ -25,6 +27,8 @@ import { EtudiantModule } from './etudiant/etudiant.module';
     RecensementModule,
     RenouvellementBourseModule,
     EtudiantModule,
+    AuthentificationModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
