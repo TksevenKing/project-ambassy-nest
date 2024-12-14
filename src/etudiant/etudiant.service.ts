@@ -15,8 +15,9 @@ export class EtudiantService {
         // On a besoin de ce etudiantsRepository pour implementer les fcts predefinis comme findOne() etc ....
 
     ) { }
-    async createEtudiant(etudiantDto) {
-        const etu = await this.etudiantsRepository.save(etudiantDto);
+    async createEtudiant(etudiantDto: etudiantDto) {
+        const etu = await this.etudiantsRepository.create(etudiantDto);
+        this.etudiantsRepository.save(etudiantDto);
         return etu;
     }
     async getInfoEtudiant(etudiant_id) {

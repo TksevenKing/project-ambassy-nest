@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
+import { userDto } from 'src/dtos/user.dto';
 
 
 // Ici definition des types recu en argumantes des fonctions
@@ -10,7 +11,7 @@ type AuthResult = { accessToken: string; userId: number; username: string };
 
 @Injectable()
 export class AuthentificationService {
-    // on geger ici la generation du JWT 
+    // on gere ici la generation du JWT 
     constructor(
         // on injecte le usersService dans le authService et on injecte le userModule dans le authModule
         private usersService: UsersService,
@@ -38,7 +39,7 @@ export class AuthentificationService {
 
         if (user && user.password === input.password) {
             return {
-                userId: user.userId,
+                userId: user.user_id,
                 username: user.username
             }
         }
