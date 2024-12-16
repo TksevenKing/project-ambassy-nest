@@ -1,13 +1,6 @@
 export class etudiantDto {
-    nom: string;
-  
-    prenom: string;
 
-    email: string;
-    
-    motDePasse: string;
-
-    telephone: string;
+    user_id: number; // pour lier l'etudiant a un user
 
     universite: string;
 

@@ -1,32 +1,50 @@
-import { Body, Controller, Get, Logger, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Put , HttpStatus, HttpException} from '@nestjs/common';
 import { etudiantDto } from 'src/dtos/etudiant.dto';
 import { renouvellementDto } from 'src/dtos/renouvellement.dto';
+import { EtudiantService } from './etudiant.service';
 
 @Controller('etudiant')
 export class EtudiantController {
-    @Get()
-    getInfoEtudiant() {
+
+    constructor(private readonly etudiantService: EtudiantService) { }
+
+    @Get(':etudiant_id')
+    async getInfoEtudiant(@Param('etudiant_id') etudiant_id) {
         Logger.log('recupere tous les infos de etudiant', 'EtudiantController');
-        return 'retourne les infos';
+        const InfoEtu =  await this.etudiantService.getInfoEtudiant(etudiant_id);
+        if(!InfoEtu){
+             throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+        }
+        return InfoEtu;
     }
 
     @Post()
-    createEtudiant(@Body() etudiantDto: etudiantDto){
-        return 'Etudiant creer avec succes';
+    async createEtudiant(@Body() etudiantDto: etudiantDto){
+        Logger.log('create etudiant','etudiantController');
+        const etu  = await this.etudiantService.createEtudiant(etudiantDto);
+        return etu;
     }
 
-    @Post('renoullement/:etudiant_id')
+    @Post('renouvellement/:etudiant_id')
     demandeRenouvellement(@Param('etudiant_id') etudiant_id, @Body() renouvellementDto: renouvellementDto){
         return "demande de renouvellement avec succes";
     }
 
     @Put(':etudiant_id')
-    modifierInfoEtu(@Param('etudiant_id') etudiant_id, @Body() etudiantDto: etudiantDto){
-        return 'info de etudiant modifier avec succes';
+    async modifierInfoEtu(@Param('etudiant_id') etudiant_id, @Body() etudiantDto: etudiantDto){
+        const newEtu = await this.etudiantService.modifierInfoEtu(etudiant_id,etudiantDto);
+        if(!newEtu){
+            throw new HttpException('not modified info etu', HttpStatus.NOT_MODIFIED);
+        }
+        return newEtu;
     }
 
-    @Put('password/:etudiant_id')
-    modifierPassword(@Param('etudiant_id') etudiant_id, @Body() passwordDto){
-        return 'mot de passe changer avec succes';
-    }
+    // @Put('password/:etudiant_id')
+    // async modifierPassword(@Param('etudiant_id') etudiant_id, @Body() etudiantDto){
+    //     const newPass = await this.etudiantService.modifierPassword(etudiant_id, etudiantDto) ;
+    //     if (!newPass){
+    //         throw new HttpException('password not modified', HttpStatus.NOT_MODIFIED);
+    //     }
+    //     return newPass;
+    // }
 }

@@ -1,4 +1,54 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { etudiantDto } from 'src/dtos/etudiant.dto';
+import { etudiantEntity } from 'src/entities/etudiant.entity';
+import { RenouvellementBourseEntity } from 'src/entities/renouvellementBourse.entity';
+import { renouvellementDto } from 'src/dtos/renouvellement.dto';
+import { Repository } from 'typeorm';
 
 @Injectable()
-export class EtudiantService {}
+export class EtudiantService {
+
+    constructor(
+        @InjectRepository(etudiantEntity)
+        private readonly etudiantsRepository: Repository<etudiantEntity>,
+        // On a besoin de ce etudiantsRepository pour implementer les fcts predefinis comme findOne() etc ....
+
+    ) { }
+    async createEtudiant(etudiantDto: etudiantDto) {
+        const etu = await this.etudiantsRepository.create(etudiantDto);
+        this.etudiantsRepository.save(etudiantDto);
+        return etu;
+    }
+    async getInfoEtudiant(etudiant_id) {
+        const etu = await this.etudiantsRepository.findOneBy({ etudiant_id });
+        if (etu) {
+            return etu;
+        }
+        return null;
+    }
+
+    async modifierInfoEtu(etudiant_id, etudiantDto) {
+        const etu = await this.etudiantsRepository.findOneBy({ etudiant_id });
+        if (etu) {
+            const newEtu = this.etudiantsRepository.update(etudiant_id, etudiantDto);
+            return this.etudiantsRepository.findOneBy({ etudiant_id }); // l'etudiant avec les informations vise a jour
+        }
+        return null;
+    }
+
+
+
+    // async demandeRenouvellement(etudiant_id, renouvellementDto){
+    //     // Normalement recevoir les documents en pdf ou photo de l'etudiant et les mettre dans la tables renouvellement
+    //     const etu = await this.etudiantsRepository.findOneBy({ etudiant_id });
+    //     const renouv = new RenouvellementBourseEntity();
+    //     renouv.status = renouvellementDto.status;
+    //     renouv.etudiant = etu;
+    //     this.renouvellementBoursesRepository.save(renouv);
+    //     return renouv;
+
+    // }
+
+
+}
