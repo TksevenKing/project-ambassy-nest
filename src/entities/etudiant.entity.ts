@@ -1,43 +1,33 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { RenouvellementBourseEntity } from "./renouvellementBourse.entity";
+import { User } from "./user.entity";
 
 
 @Entity('etudiants')
 
-export class etudiantEntity{
-    @PrimaryGeneratedColumn({name: 'etudiant_id'})
+export class etudiantEntity {
+    @PrimaryGeneratedColumn({ name: 'etudiant_id' })
     etudiant_id: number;
-   
-    @Column()
-    nom: string;
-  
-    @Column()
-    prenom: string;
 
-    @Column()
-    email: string;
-    
-    @Column()
-    motDePasse: string;
-
-    @Column()
-    telephone: string;
+    @OneToOne(type => User, user => user.etudiant)
+    @JoinColumn()
+    user: User;
 
     @Column()
     universite: string;
 
     @Column()
     filiere: string;
-    
+
     @Column()
     niveau_etude: string;
 
     @Column()
     annee_bac: string;
 
-    @Column({type: 'tinyint', default: 1})
+    @Column({ type: 'tinyint', default: 1 })
     bourseActive: number;
-    
+
     @Column()
     sexe: string;
 
@@ -52,4 +42,6 @@ export class etudiantEntity{
 
     @OneToMany(type => RenouvellementBourseEntity, renouvellement => renouvellement.etudiant)
     renouvellements: RenouvellementBourseEntity[];
+
+
 }
