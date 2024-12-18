@@ -10,11 +10,8 @@ export class RenouvellementBourseEntity {
     date_demande: Date;
 
     @Column({ default: "nonTraiter" })  //type: "enum", enum: ["enCours", "traiter", "nonTraiter"],
-    statut: string;
+    status: string;
 
-    @Column()
-    etudiant_id: number;
-
-    @ManyToOne(type => etudiantEntity, etudiant => etudiant.renouvellements)
+    @ManyToOne(type => etudiantEntity, etudiant => etudiant.renouvellements, {onDelete: "CASCADE"})
     etudiant: etudiantEntity;
 }
