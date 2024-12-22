@@ -1,19 +1,60 @@
-import { Controller, Get, Logger, Param } from '@nestjs/common';
+import { Controller, Get, Logger, Param, Post, Put, Delete, UseInterceptors, UploadedFile, Body, UploadedFiles, Query } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express/multer';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { RenouvellementBourseService } from './renouvellement-bourse.service';
+import * as fs from 'fs';
+import { renouvellementDto } from 'src/dtos/renouvellement.dto';
+import { CustomRequest } from 'src/Interface';
+import { query } from 'express';
 
 @Controller('renouvellement')
 export class RenouvellementBourseController {
+    constructor(private readonly renouvellementservice: RenouvellementBourseService){}
+    
     @Get()
-    getAllEtudiant() {
-        Logger.log('recupere tous les etudiants', 'EtudiantController');
-        return 'retourne les etudiants';
+    getAllRenouvellement(@Query() query){
+        return this.renouvellementservice.getAllRenouvellement()
     }
-    @Get(':etudiant_id')
-    getOneEtudiant(@Param('etudiant_id') etudiant_id) {
-        Logger.log('recupere un seul etudiant', 'EtudiantController');
-        return 'recupere un seul etudiant';
+
+    @Get(':renouvellement_id')
+    getOneRenouvellement(@Param('renouvellement_id') renouvellement_id: number){
+        return this.renouvellementservice.getOneRenouvellement(renouvellement_id)
     }
-    @Get('status/:email')
-    getStatusEtudiant(@Param('email') email) {
-        Logger.log('retourne si un etudiant est boursier ou pas', 'EtudiantController');
+    
+    @Post()
+    @UseInterceptors(FilesInterceptor('files',2,{
+        storage: diskStorage({
+          destination: (req: CustomRequest, file, callback) =>{
+            if (!req.generatedFolderPath) {
+                const globalFolder = './src/Renouvellement';
+                const uniqueFolder = `${new Date().toISOString().split('T')[0]}-${Date.now()}`;
+                req.generatedFolderPath = `${globalFolder}/${uniqueFolder}`;
+                fs.mkdirSync(req.generatedFolderPath, { recursive: true });
+            }
+            callback(null, req.generatedFolderPath);
+          },
+          filename: (req, file, callback) => {
+            const uniqueSuffix = Date.now()
+            const ext = extname(file.originalname)
+            const filename = `${file.originalname}-${uniqueSuffix}${ext}`
+            callback(null, filename);
+          },
+        }),
+      }))
+    handleUpload(@UploadedFiles() files: Express.Multer.File[],@Body('email') email: string,@Body() renouvellement: renouvellementDto){
+        return this.renouvellementservice.createRenouvellement(email, renouvellement)
     }
+
+    @Put(':renouvelement_id')
+    updateFile(@Param('renouvellement_id') renouvellement_id: number,@Body() renouvellement: renouvellementDto){
+        Logger.log('Modification du dossier.zip étudiant', 'EtudiantController');
+        return this.renouvellementservice.setStatus(renouvellement_id,renouvellement)
+    }
+
+   /* @Delete(':renouvellement_id')
+    deleteFile(@Param('renouvellemend_id') renouvellement_id: number){
+        Logger.log('Supprimer un dossier.zip etudiant', 'EtudiantController');
+        return this.renouvellementservice.removeRenouvellement(renouvellement_id)
+    }*/
 }
