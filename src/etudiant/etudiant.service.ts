@@ -21,7 +21,10 @@ export class EtudiantService {
         return etu;
     }
     async getInfoEtudiant(etudiant_id) {
-        const etu = await this.etudiantsRepository.findOneBy({ etudiant_id });
+        const etu = await this.etudiantsRepository.findOne({ 
+            where: { etudiant_id},
+            relations: ['user']
+        });
         if (etu) {
             return etu;
         }
