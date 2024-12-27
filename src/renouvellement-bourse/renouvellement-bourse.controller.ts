@@ -43,13 +43,20 @@ export class RenouvellementBourseController {
         }),
       }))
     handleUpload(@UploadedFiles() files: Express.Multer.File[],@Body('email') email: string,@Body() renouvellement: renouvellementDto){
-        return this.renouvellementservice.createRenouvellement(email, renouvellement)
+        return this.renouvellementservice.createRenouvellement(email, renouvellement,files)
     }
 
     @Put(':renouvelement_id')
     updateFile(@Param('renouvellement_id') renouvellement_id: number,@Body() renouvellement: renouvellementDto){
         Logger.log('Modification du dossier.zip étudiant', 'EtudiantController');
         return this.renouvellementservice.setStatus(renouvellement_id,renouvellement)
+    }
+
+
+    @Delete(':renouvellement_id')
+    deleteFile(@Param('renouvellement_id') renouvellement_id: number) {
+        Logger.log('Suppression d\'un dossier.zip étudiant', 'EtudiantController');
+        return this.renouvellementservice.removeRenouvellement(renouvellement_id);
     }
 
    /* @Delete(':renouvellement_id')
