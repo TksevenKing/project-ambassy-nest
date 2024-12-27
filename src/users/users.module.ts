@@ -6,6 +6,7 @@ import { User } from 'src/entities/user.entity';
 import { etudiantEntity } from 'src/entities/etudiant.entity';
 import { ressortissantEntity } from 'src/entities/ressortissant.entity';
 // import { ressortissantEntity } from 'src/entities/ressortissant.entity';
+import * as bcrypt from 'bcrypt'
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, etudiantEntity, ressortissantEntity])],

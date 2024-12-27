@@ -1,49 +1,60 @@
-import { Body, Controller, Get, Logger, Param, Post, Put , HttpStatus, HttpException} from '@nestjs/common';
+import { Body,Controller, Get, Logger, Param,  Post,Put,HttpStatus,HttpException, UseGuards } from '@nestjs/common';
 import { etudiantDto } from 'src/dtos/etudiant.dto';
 import { renouvellementDto } from 'src/dtos/renouvellement.dto';
 import { EtudiantService } from './etudiant.service';
+import { EtudiantGuard } from './etudiant.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('etudiant')
 export class EtudiantController {
-
     constructor(private readonly etudiantService: EtudiantService) { }
-
+    @UseGuards(AuthGuard('jwt'), EtudiantGuard) 
     @Get(':etudiant_id')
     async getInfoEtudiant(@Param('etudiant_id') etudiant_id) {
-        Logger.log('recupere tous les infos de etudiant', 'EtudiantController');
-        const InfoEtu =  await this.etudiantService.getInfoEtudiant(etudiant_id);
-        if(!InfoEtu){
-             throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+        Logger.log('Recupere tous les infos de l\'étudiant', 'EtudiantController');
+        const infoEtu = await this.etudiantService.getInfoEtudiant(etudiant_id);
+        if (!infoEtu) {
+            throw new HttpException('Not found', HttpStatus.NOT_FOUND);
         }
-        return InfoEtu;
+        return infoEtu;
     }
 
     @Post()
-    async createEtudiant(@Body() etudiantDto: etudiantDto){
-        Logger.log('create etudiant','etudiantController');
-        const etu  = await this.etudiantService.createEtudiant(etudiantDto);
+    async createEtudiant(@Body() etudiantDto: etudiantDto) {
+        Logger.log('Create étudiant', 'EtudiantController');
+        const etu = await this.etudiantService.createEtudiant(etudiantDto);
         return etu;
     }
 
+    @UseGuards(AuthGuard('jwt'), EtudiantGuard) 
     @Post('renouvellement/:etudiant_id')
-    demandeRenouvellement(@Param('etudiant_id') etudiant_id, @Body() renouvellementDto: renouvellementDto){
-        return "demande de renouvellement avec succes";
+    async demandeRenouvellement(
+        @Param('etudiant_id') etudiant_id,
+        @Body() renouvellementDto: renouvellementDto,
+    ) {
+        Logger.log(`Demande de renouvellement pour étudiant ${etudiant_id}`, 'EtudiantController');
+        return 'Demande de renouvellement avec succès';
     }
 
+    @UseGuards(AuthGuard('jwt'), EtudiantGuard) 
     @Put(':etudiant_id')
-    async modifierInfoEtu(@Param('etudiant_id') etudiant_id, @Body() etudiantDto: etudiantDto){
-        const newEtu = await this.etudiantService.modifierInfoEtu(etudiant_id,etudiantDto);
-        if(!newEtu){
-            throw new HttpException('not modified info etu', HttpStatus.NOT_MODIFIED);
+    async modifierInfoEtu(
+        @Param('etudiant_id') etudiant_id,
+        @Body() etudiantDto: etudiantDto,
+    ) {
+        const newEtu = await this.etudiantService.modifierInfoEtu(etudiant_id, etudiantDto);
+        if (!newEtu) {
+            throw new HttpException('Not modified info etu', HttpStatus.NOT_MODIFIED);
         }
         return newEtu;
     }
 
+    // Exemple de route pour modifier le mot de passe
     // @Put('password/:etudiant_id')
-    // async modifierPassword(@Param('etudiant_id') etudiant_id, @Body() etudiantDto){
-    //     const newPass = await this.etudiantService.modifierPassword(etudiant_id, etudiantDto) ;
-    //     if (!newPass){
-    //         throw new HttpException('password not modified', HttpStatus.NOT_MODIFIED);
+    // async modifierPassword(@Param('etudiant_id') etudiant_id, @Body() etudiantDto) {
+    //     const newPass = await this.etudiantService.modifierPassword(etudiant_id, etudiantDto);
+    //     if (!newPass) {
+    //         throw new HttpException('Password not modified', HttpStatus.NOT_MODIFIED);
     //     }
     //     return newPass;
     // }

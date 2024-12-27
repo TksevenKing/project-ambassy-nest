@@ -24,7 +24,7 @@ export class User {
   telephone: string;
 
   @Column()
-  type: 'student' | 'ressortissant';
+  type: 'student' | 'ressortissant' | 'employee';
 
   @OneToOne(() => etudiantEntity, (etudiant) => etudiant.user)
   etudiant: etudiantEntity;
