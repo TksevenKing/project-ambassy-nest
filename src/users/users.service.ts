@@ -5,6 +5,7 @@ import { User } from 'src/entities/user.entity';
 import { etudiantEntity } from 'src/entities/etudiant.entity';
 import { userDto } from 'src/dtos/user.dto';
 import { etudiantDto } from 'src/dtos/etudiant.dto';
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -13,10 +14,23 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(etudiantEntity)
     private readonly etudiantRepository: Repository<etudiantEntity>,
-  ) {}
+
+  ) { }
+
+  private readonly saltRounds = 10 // Pour la complexite du hashage
+
+  // Ma fct de Hashage
+  async hashPassowrd(password: string) {
+    const hashedPassword = await bcrypt.hash(password, this.saltRounds);
+    return hashedPassword;
+  }
 
   // Création d'un utilisateur
   async createUser(userDto: userDto) {
+    console.log("Password Before Hash: "+ userDto.password); // password de Oumar: "adminpass"
+    const hashedPassword = await this.hashPassowrd(userDto.password);
+
+    userDto.password = hashedPassword;  // Je remplace le password courant par le password hashee
     const user = this.userRepository.create(userDto);
     console.log(user);
     return this.userRepository.save(user);
@@ -25,7 +39,7 @@ export class UsersService {
   // Création d'un étudiant
   async createEtudiant(etudiantDto: etudiantDto) {
     const user_id = etudiantDto.user_id;
-    const user = await this.userRepository.findOneBy({  user_id });
+    const user = await this.userRepository.findOneBy({ user_id });
     if (!user) {
       throw new Error('User not found');
     }
