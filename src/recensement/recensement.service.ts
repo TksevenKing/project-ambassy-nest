@@ -69,7 +69,10 @@ export class RecensementService {
             {
                 return new Error("Vous ne pouvez supprimer car cet recensement  n'existe pas");
             }
-            return recensement;
+             
+           
+            await this.recensementRepository.remove(recensement);
+            return { message: `Rendez-vous avec l'ID ${id_Recensement} supprimé avec succès.` };
 
             
         } catch (error) {
