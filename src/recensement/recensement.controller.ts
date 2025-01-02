@@ -52,7 +52,6 @@ export class RecensementController {
             return recensement;
         throw new HttpException('on est peut pas supprimer ce rencensement',HttpStatus.NOT_FOUND);
 
-
     }
 
 
