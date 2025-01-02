@@ -8,6 +8,8 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('etudiant')
 export class EtudiantController {
     constructor(private readonly etudiantService: EtudiantService) { }
+
+
     @UseGuards(AuthGuard('jwt'), EtudiantGuard) 
     @Get(':etudiant_id')
     async getInfoEtudiant(@Param('etudiant_id') etudiant_id) {
@@ -28,20 +30,15 @@ export class EtudiantController {
 
     @UseGuards(AuthGuard('jwt'), EtudiantGuard) 
     @Post('renouvellement/:etudiant_id')
-    async demandeRenouvellement(
-        @Param('etudiant_id') etudiant_id,
-        @Body() renouvellementDto: renouvellementDto,
-    ) {
+    async demandeRenouvellement( @Param('etudiant_id') etudiant_id, @Body() renouvellementDto: renouvellementDto ) {
         Logger.log(`Demande de renouvellement pour étudiant ${etudiant_id}`, 'EtudiantController');
         return 'Demande de renouvellement avec succès';
     }
 
     @UseGuards(AuthGuard('jwt'), EtudiantGuard) 
     @Put(':etudiant_id')
-    async modifierInfoEtu(
-        @Param('etudiant_id') etudiant_id,
-        @Body() etudiantDto: etudiantDto,
-    ) {
+    async modifierInfoEtu( @Param('etudiant_id') etudiant_id, @Body() etudiantDto: etudiantDto, ) {
+
         const newEtu = await this.etudiantService.modifierInfoEtu(etudiant_id, etudiantDto);
         if (!newEtu) {
             throw new HttpException('Not modified info etu', HttpStatus.NOT_MODIFIED);
@@ -49,13 +46,4 @@ export class EtudiantController {
         return newEtu;
     }
 
-    // Exemple de route pour modifier le mot de passe
-    // @Put('password/:etudiant_id')
-    // async modifierPassword(@Param('etudiant_id') etudiant_id, @Body() etudiantDto) {
-    //     const newPass = await this.etudiantService.modifierPassword(etudiant_id, etudiantDto);
-    //     if (!newPass) {
-    //         throw new HttpException('Password not modified', HttpStatus.NOT_MODIFIED);
-    //     }
-    //     return newPass;
-    // }
 }

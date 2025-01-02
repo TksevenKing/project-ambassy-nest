@@ -42,16 +42,5 @@ export class EtudiantService {
 
 
 
-    // async demandeRenouvellement(etudiant_id, renouvellementDto){
-    //     // Normalement recevoir les documents en pdf ou photo de l'etudiant et les mettre dans la tables renouvellement
-    //     const etu = await this.etudiantsRepository.findOneBy({ etudiant_id });
-    //     const renouv = new RenouvellementBourseEntity();
-    //     renouv.status = renouvellementDto.status;
-    //     renouv.etudiant = etu;
-    //     this.renouvellementBoursesRepository.save(renouv);
-    //     return renouv;
-
-    // }
-
 
 }

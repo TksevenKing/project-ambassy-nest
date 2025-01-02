@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class EtudiantGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest();
-        const user = request.user; // Assurez-vous que l'utilisateur est attaché à la requête (via un middleware ou stratégie JWT)
+        const user = request.user; 
       
         // Vérifiez si l'utilisateur est authentifié
         if (!user) {

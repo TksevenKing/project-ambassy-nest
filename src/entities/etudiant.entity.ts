@@ -31,13 +31,13 @@ export class etudiantEntity {
     @Column()
     sexe: string;
 
-    @Column()
+    @Column({unique: true})
     numero_passeport: string;
 
     @Column()
     ville: string;
 
-    @Column()
+    @Column({unique: true})
     numero_consulaire: string;
 
     @OneToMany(type => RenouvellementBourseEntity, renouvellement => renouvellement.etudiant)

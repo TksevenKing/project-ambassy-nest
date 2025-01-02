@@ -104,15 +104,6 @@ export class RenouvellementBourseService {
         return await this.renouvellementRepository.remove(renouvellement);
     }
 
-    /*async removeRenouvellement(renouvellement_id: number){
-        const renouvellement = await this.renouvellementRepository.findOne({
-            where: {renouvellement_id: renouvellement_id},
-            relations: ['etudiant']
-        })
-        if(!renouvellement){
-            throw new HttpException("NOT_FOUND!!!!!",HttpStatus.NOT_FOUND)
-        }
-        return await this.renouvellementRepository.remove(renouvellement)
-    }*/
+
 }
 
