@@ -10,21 +10,31 @@ import * as fs from 'fs';
 @Injectable()
 export class RenouvellementBourseService {
     constructor(
-        @InjectRepository(RenouvellementBourseEntity) private readonly renouvellementRepository: Repository<RenouvellementBourseEntity>,
-        @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @InjectRepository(etudiantEntity) private readonly etudiantRepository: Repository<etudiantEntity>
-    ) { }
+        @InjectRepository(RenouvellementBourseEntity)
+        private readonly renouvellementRepository: Repository<RenouvellementBourseEntity>,
+        @InjectRepository(User)
+        private readonly userRepository: Repository<User>,
+        @InjectRepository(etudiantEntity)
+        private readonly etudiantRepository: Repository<etudiantEntity>,
+    ) {}
 
+    // Créer un renouvellement
     async createRenouvellement(email: string, renouvellement: renouvellementDto, files: Express.Multer.File[]) {
-        const user = await this.userRepository.findOneBy({ email: email })
+        const user = await this.userRepository.findOneBy({ email });
         if (!user) {
-            throw new HttpException("NOT_FOUND!!!!!", HttpStatus.NOT_FOUND)
+            throw new HttpException("Utilisateur non trouvé.", HttpStatus.NOT_FOUND);
         }
-        const etudiant = await this.etudiantRepository.findOneBy({ user })
+
+        const etudiant = await this.etudiantRepository.findOneBy({ user });
         if (!etudiant) {
-            throw new HttpException("NOT_FOUND!!!!!", HttpStatus.NOT_FOUND)
+            throw new HttpException("Étudiant non trouvé.", HttpStatus.NOT_FOUND);
         }
-        const documentPaths = files.map(file => file.path); // je recceuille le chemin des fichiers uploader
+
+        if (!files || files.length === 0) {
+            throw new HttpException("Aucun fichier fourni.", HttpStatus.BAD_REQUEST);
+        }
+
+        const documentPaths = files.map((file) => file.path);
 
         const nouvelRenouvellement = this.renouvellementRepository.create({
             ...renouvellement,
@@ -32,15 +42,18 @@ export class RenouvellementBourseService {
             etudiant,
             documents: documentPaths,
         });
-        return await this.renouvellementRepository.save(nouvelRenouvellement)
+
+        return await this.renouvellementRepository.save(nouvelRenouvellement);
     }
 
+    // Récupérer tous les renouvellements
     async getAllRenouvellement() {
-        const infos = await this.renouvellementRepository.find({ relations: ['etudiant', 'etudiant.user'] })
-        if (!infos) {
-            throw new HttpException("NOT_FOUND!!!!!", HttpStatus.NOT_FOUND)
+        const infos = await this.renouvellementRepository.find({ relations: ['etudiant', 'etudiant.user'] });
+        if (!infos || infos.length === 0) {
+            throw new HttpException("Aucun renouvellement trouvé.", HttpStatus.NOT_FOUND);
         }
-        return await infos.map(info => ({
+
+        return infos.map((info) => ({
             renouvellement_id: info.renouvellement_id,
             date_demande: info.date_demande,
             status: info.status,
@@ -58,41 +71,58 @@ export class RenouvellementBourseService {
                 sexe: info.etudiant.sexe,
                 numero_passeport: info.etudiant.numero_passeport,
                 ville: info.etudiant.ville,
-                numero_consulaire: info.etudiant.numero_consulaire
-            }
-
-        }))
+                numero_consulaire: info.etudiant.numero_consulaire,
+            },
+        }));
     }
+
+    // Récupérer un renouvellement par ID
     async getOneRenouvellement(renouvellement_id: number) {
         const info = await this.renouvellementRepository.findOne({
-            where: { renouvellement_id: renouvellement_id },
-            relations: ['etudiant','etudiant.user']
-        })
+            where: { renouvellement_id },
+            relations: ['etudiant', 'etudiant.user'],
+        });
         if (!info) {
-            throw new HttpException("NOT_FOUND!!!!!", HttpStatus.NOT_FOUND)
+            throw new HttpException("Renouvellement non trouvé.", HttpStatus.NOT_FOUND);
         }
-        return info
+        return info;
     }
+
+    // Récupérer un renouvellement par email
+    async getOneRenouvellementByEmail(email: string) {
+        const info = await this.renouvellementRepository.findOne({
+            where: { etudiant: { user: { email } } },
+            relations: ['etudiant', 'etudiant.user'],
+        });
+        if (!info) {
+            throw new HttpException("Renouvellement non trouvé pour cet email.", HttpStatus.NOT_FOUND);
+        }
+        return info;
+    }
+
+    // Modifier le statut d'un renouvellement
     async setStatus(renouvellement_id: number, renouvellementdto: renouvellementDto) {
         const renouvellement = await this.renouvellementRepository.findOne({
-            where: { renouvellement_id: renouvellement_id },
-        })
+            where: { renouvellement_id },
+        });
         if (!renouvellement) {
-            throw new HttpException("NOT_FOUND!!!!!", HttpStatus.NOT_FOUND)
+            throw new HttpException("Renouvellement non trouvé.", HttpStatus.NOT_FOUND);
         }
+
         Object.assign(renouvellement, renouvellementdto);
         return await this.renouvellementRepository.save(renouvellement);
     }
 
+    // Supprimer un renouvellement
     async removeRenouvellement(renouvellement_id: number) {
         const renouvellement = await this.renouvellementRepository.findOne({
-            where: { renouvellement_id: renouvellement_id },
+            where: { renouvellement_id },
         });
         if (!renouvellement) {
-            throw new HttpException("NOT_FOUND!!!!!", HttpStatus.NOT_FOUND);
+            throw new HttpException("Renouvellement non trouvé.", HttpStatus.NOT_FOUND);
         }
 
-        // Delete associated documents from the file system
+        // Supprimer les fichiers associés au renouvellement
         if (renouvellement.documents && renouvellement.documents.length > 0) {
             renouvellement.documents.forEach((documentPath) => {
                 if (fs.existsSync(documentPath)) {
@@ -103,7 +133,16 @@ export class RenouvellementBourseService {
 
         return await this.renouvellementRepository.remove(renouvellement);
     }
-
-
+    async getFiles(renouvellement_id: number) {
+        const renouvellement = await this.renouvellementRepository.findOne({
+            where: { renouvellement_id },
+        });
+    
+        if (!renouvellement) {
+            throw new HttpException("Renouvellement non trouvé.", HttpStatus.NOT_FOUND);
+        }
+    
+        return renouvellement.documents; // Retourne les chemins des fichiers
+    }
+    
 }
-

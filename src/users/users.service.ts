@@ -6,6 +6,10 @@ import { etudiantEntity } from 'src/entities/etudiant.entity';
 import { userDto } from 'src/dtos/user.dto';
 import { etudiantDto } from 'src/dtos/etudiant.dto';
 import * as bcrypt from 'bcrypt'
+import { ressortissantDto } from 'src/dtos/ressortissant.dto';
+import { ressortissantEntity } from 'src/entities/ressortissant.entity';
+import { employeDto } from 'src/dtos/employeAmbassade.dto';
+import { employe_ambassadeEntity } from 'src/entities/employeAmbassade.entity';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +18,10 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(etudiantEntity)
     private readonly etudiantRepository: Repository<etudiantEntity>,
+    @InjectRepository(ressortissantEntity)
+    private readonly ressortissantRepository: Repository<ressortissantEntity>,
+    @InjectRepository(employe_ambassadeEntity)
+    private readonly employeRepository: Repository<employe_ambassadeEntity>
 
   ) { }
 
@@ -27,7 +35,7 @@ export class UsersService {
 
   // Création d'un utilisateur
   async createUser(userDto: userDto) {
-    console.log("Password Before Hash: "+ userDto.password); // password de Oumar: "adminpass"
+    console.log("Password Before Hash: "+ userDto.password); // password de Oumar: "adminpass" pour les autres c'est leur username qui est le MDP
     const hashedPassword = await this.hashPassowrd(userDto.password);
 
     userDto.password = hashedPassword;  // Je remplace le password courant par le password hashee
@@ -51,7 +59,34 @@ export class UsersService {
 
     return this.etudiantRepository.save(etudiant);
   }
+  // Creation d'un Ressortissant 
+  async createRessortissant(ressortissantDto: ressortissantDto) {
+    const user_id = ressortissantDto.user_id;
+    const user =  await this.userRepository.findOneBy({ user_id });
 
+    if( !user){
+      throw new Error('User not found');
+    }
+    const ressortissant = this.ressortissantRepository.create({
+      ...ressortissantDto,
+      user
+    });
+    return this.ressortissantRepository.save(ressortissant);
+  }
+  // Creation d'un employee de l'ambassade 
+  async createEmploye(employeDto: employeDto){
+    const user_id = employeDto.user_id;
+    const user = await this.userRepository.findOneBy({ user_id });
+
+    if(!user){
+      throw new Error('User not found !');
+    }
+    const employe = this.employeRepository.create({
+      ...employeDto,
+      user
+    });
+    return this.employeRepository.save(employe);
+  }
   // Récupérer les informations d'un utilisateur
   async getInfoUser(user_id: number) {
     return this.userRepository.findOneBy({ user_id });
@@ -82,5 +117,16 @@ export class UsersService {
   // Trouver un utilisateur par nom
   async findUserByName(username: string) {
     return this.userRepository.findOneBy({ username });
+  }
+
+  
+  // Recherche par email
+  async findUsersByEmail(email: string) {
+    return this.userRepository.find({ where: { email } });
+  }
+
+  // Recherche par rôle
+  async findUsersByRole(type: string) {
+    return this.userRepository.find({ where: { type } });
   }
 }

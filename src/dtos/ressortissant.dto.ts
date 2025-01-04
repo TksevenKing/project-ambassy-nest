@@ -2,6 +2,7 @@
 
 
 export class ressortissantDto{
+    user_id: number; // Pour lier le user au ressortissant
     
     sexe: string;
     

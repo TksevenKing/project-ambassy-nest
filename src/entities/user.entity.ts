@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 import { etudiantEntity } from './etudiant.entity';
 import { ressortissantEntity } from './ressortissant.entity';
+import { employe_ambassadeEntity } from './employeAmbassade.entity';
 
 
 @Entity('users')
@@ -24,10 +25,13 @@ export class User {
   telephone: string;
 
   @Column()
-  type: 'student' | 'ressortissant' | 'employee';
+  type: string; //'student' | 'ressortissant' | 'employee';
 
   @OneToOne(() => etudiantEntity, (etudiant) => etudiant.user)
   etudiant: etudiantEntity;
+
+  @OneToOne(() => employe_ambassadeEntity, (employe) => employe.user)
+  employe: employe_ambassadeEntity;
 
   @OneToOne(() => ressortissantEntity, (ressortissant) => ressortissant.user)
   ressortissant: ressortissantEntity;

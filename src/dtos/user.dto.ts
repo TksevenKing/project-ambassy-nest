@@ -15,5 +15,5 @@ export class userDto {
     telephone: string;
   
 
-    type: 'student' | 'ressortissant';
+    type: string; //'student' | 'ressortissant' | 'employe';
 }

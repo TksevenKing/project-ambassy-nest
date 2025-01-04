@@ -2,45 +2,63 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { etudiantDto } from 'src/dtos/etudiant.dto';
 import { etudiantEntity } from 'src/entities/etudiant.entity';
-import { RenouvellementBourseEntity } from 'src/entities/renouvellementBourse.entity';
-import { renouvellementDto } from 'src/dtos/renouvellement.dto';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class EtudiantService {
+  constructor(
+    @InjectRepository(etudiantEntity)
+    private readonly etudiantsRepository: Repository<etudiantEntity>
+  ) {}
 
-    constructor(
-        @InjectRepository(etudiantEntity)
-        private readonly etudiantsRepository: Repository<etudiantEntity>,
-        // On a besoin de ce etudiantsRepository pour implementer les fcts predefinis comme findOne() etc ....
+  // Création d'un étudiant
+  async createEtudiant(etudiantDto: etudiantDto) {
+    const etudiant = this.etudiantsRepository.create(etudiantDto);
+    await this.etudiantsRepository.save(etudiant); // Correction pour s'assurer que c'est l'entité créée qui est sauvegardée
+    return etudiant;
+  }
 
-    ) { }
-    async createEtudiant(etudiantDto: etudiantDto) {
-        const etu = await this.etudiantsRepository.create(etudiantDto);
-        this.etudiantsRepository.save(etudiantDto);
-        return etu;
+  // Récupérer les informations d'un étudiant avec son ID
+  async getInfoEtudiant(etudiant_id: number) {
+    const etudiant = await this.etudiantsRepository.findOne({
+      where: { etudiant_id },
+      relations: ['user'], // Inclure les relations avec l'utilisateur
+    });
+
+    if (!etudiant) {
+      return null;
     }
-    async getInfoEtudiant(etudiant_id) {
-        const etu = await this.etudiantsRepository.findOne({ 
-            where: { etudiant_id},
-            relations: ['user']
-        });
-        if (etu) {
-            return etu;
-        }
-        return null;
+    return etudiant;
+  }
+
+  // Modifier les informations d'un étudiant
+  async modifierInfoEtu(etudiant_id: number, etudiantDto: etudiantDto) {
+    const etudiant = await this.etudiantsRepository.findOneBy({ etudiant_id });
+
+    if (!etudiant) {
+      return null;
     }
 
-    async modifierInfoEtu(etudiant_id, etudiantDto) {
-        const etu = await this.etudiantsRepository.findOneBy({ etudiant_id });
-        if (etu) {
-            const newEtu = this.etudiantsRepository.update(etudiant_id, etudiantDto);
-            return this.etudiantsRepository.findOneBy({ etudiant_id }); // l'etudiant avec les informations vise a jour
-        }
-        return null;
+    await this.etudiantsRepository.update(etudiant_id, etudiantDto); 
+    return this.etudiantsRepository.findOneBy({ etudiant_id }); 
+  }
+
+  // Supprimer un étudiant
+  async supprimerEtudiant(etudiant_id: number) {
+    const etudiant = await this.etudiantsRepository.findOneBy({ etudiant_id });
+
+    if (!etudiant) {
+      return null;
     }
 
+    await this.etudiantsRepository.delete(etudiant_id);
+    return { message: 'Étudiant supprimé avec succès' };
+  }
 
-
-
+  // Récupérer tous les étudiants
+  async recupererTousLesEtudiants() {
+    return this.etudiantsRepository.find({
+      relations: ['user'], 
+    });
+  }
 }

@@ -51,6 +51,10 @@ export class RenouvellementBourseController {
         Logger.log('Modification du dossier.zip étudiant', 'EtudiantController');
         return this.renouvellementservice.setStatus(renouvellement_id,renouvellement)
     }
+    @Get(':renouvellement_id/files')
+      getFiles(@Param('renouvellement_id') renouvellement_id: number) {
+        return this.renouvellementservice.getFiles(renouvellement_id);
+      }
 
 
     @Delete(':renouvellement_id')
