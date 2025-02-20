@@ -1,7 +1,7 @@
 # **Gestion d'Ambassade - NestJS**  
 
 ## 📌 **Description**  
-Ce projet est une plateforme web développée avec **NestJS** pour la gestion des services administratifs d'une ambassade. Il permet d'optimiser la gestion des rendez-vous, des étudiants pris en charge par l'académie de l'ambassade, ainsi que d'autres processus administratifs.  
+Ce projet est une plateforme web développée avec NestJS pour la gestion administrative d'une ambassade. Il permet notamment la gestion des rendez-vous, le recensement des ressortissants, ainsi que le suivi et le renouvellement des bourses des étudiants. 
 
 ## 🚀 **Fonctionnalités Principales**  
 ✅ **Gestion des rendez-vous** : Les visiteurs peuvent prendre des rendez-vous via un système structuré.  
