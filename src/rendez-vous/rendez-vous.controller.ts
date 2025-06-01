@@ -20,7 +20,7 @@ export class RendezVousController {
         
         if (!rendezVous) {
             throw new HttpException(
-                'Le rendez-vous avec cet identifiant n\'existe pas.',
+                'Le rendez-vous avec cet identifiant n\'existe pas.sdnwcjhwd',
                 HttpStatus.NOT_FOUND,
             );
         }
@@ -30,7 +30,7 @@ export class RendezVousController {
         };
     } catch (error) {
         throw new HttpException(
-            'Une erreur est survenue lors de la récupération du rendez-vous.',
+            'Une erreur est survenue lors de la récupération du rendez-vous. test push',
             HttpStatus.INTERNAL_SERVER_ERROR,
         );
     }
