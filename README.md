@@ -8,14 +8,14 @@ Ce projet est une plateforme web développée avec NestJS pour la gestion admini
 ✅ **Rôles et permissions** : Différents utilisateurs (Admin, Secrétaire, Responsable Académique) ont des accès spécifiques.  
 ✅ **Suivi des étudiants** : Le responsable académique peut gérer les dossiers des étudiants et leur envoyer des confirmations par e-mail.  
 ✅ **Authentification sécurisée** : Système d'authentification avec gestion des sessions et des rôles.  
-✅ **Notifications** : Envoi d'e-mails ou de messages WhatsApp pour informer les utilisateurs des mises à jour.  
+✅ **Notifications** : Envoi d'e-mails pour informer les utilisateurs des mises à jour.  
 
 ## 🛠 **Technologies Utilisées**  
 - **Backend** : [NestJS](https://nestjs.com/) (TypeScript, REST API)  
 - **Base de données** : MySQL (avec TypeORM)  
-- **Authentification** : JWT / Passport.js  
-- **Communication** : Nodemailer (e-mails), WhatsApp API  
-- **Déploiement** : Docker, Heroku/VPS  
+- **Authentification** : JWT 
+- **Communication** : SendGrid (e-mails)
+- **Déploiement** : Docker  
 
 ## 📖 **Installation et Exécution**  
 1️⃣ **Cloner le projet** :  
